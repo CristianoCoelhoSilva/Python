@@ -13,6 +13,3 @@ connection = mysql.connector.connect(
             password='')
 
 mycursor = connection.cursor()
-
-def BitcoinPreco():
-    mycursor.execute("CREATE TABLE bitcoin_precos (id int not null, valor int, criptomoeda VARCHAR(32))")

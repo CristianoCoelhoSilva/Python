@@ -1,0 +1,33 @@
+import pandas as pd
+
+file_path = "Combatendo as Mudanças Climáticas.xlsx"
+
+# Define a função para formatar os valores como percentual
+def format_percent(val):
+    try:
+        if val.startswith("0."):  # apenas valores que começam com 0.
+            num = float(val)
+            return f"{num * 100:.2f}".replace(".", ",") + "%"
+        else:
+            return val
+    except:
+        return val  # retorna o original caso dê erro
+
+# Lista de abas de interesse: de Question 10 a Question 91
+sheet_names = [f"Question {i}" for i in range(10, 92)]
+
+# Lista para armazenar os DataFrames
+df_list = []
+
+# Loop por todas as abas
+for sheet in sheet_names:
+    try:
+        df = pd.read_excel(file_path, sheet_name=sheet, dtype=str)
+        df = df.applymap(format_percent)
+        df["source_question"] = sheet  # adiciona uma coluna para identificar a aba
+        df_list.append(df)
+    except Exception as e:
+        print(f"Erro ao processar {sheet}: {e}")
+
+# Concatena todos os DataFrames
+all_questions_df = pd.concat(df_list, ignore_index=True)
